@@ -1,0 +1,36 @@
+---
+manifest_version: "1"
+name: hylo
+integrity:
+  uuid: 00000000-0000-0000-0000-000000000000
+  properties: ~
+  origin_time: 2022-07-14T19:51:25.736Z
+  zomes:
+    - name: comments_integrity
+      bundled: ../../target/wasm32-unknown-unknown/release/comments_integrity.wasm
+    - name: posts_integrity
+      bundled: ../../target/wasm32-unknown-unknown/release/posts_integrity.wasm
+    - name: groups_integrity
+      bundled: ../../target/wasm32-unknown-unknown/release/groups_integrity.wasm
+    - name: people_integrity
+      bundled: ../../target/wasm32-unknown-unknown/release/people_integrity.wasm
+
+coordinator:
+  zomes:
+    - name: comments
+      bundled: ../../target/wasm32-unknown-unknown/release/comments.wasm
+      dependencies:
+        - name: comments_integrity
+    - name: posts
+      bundled: ../../target/wasm32-unknown-unknown/release/posts.wasm
+      dependencies:
+        - name: posts_integrity
+    - name: groups
+      bundled: ../../target/wasm32-unknown-unknown/release/groups.wasm
+      dependencies:
+        - name: groups_integrity
+    - name: people
+      bundled: ../../target/wasm32-unknown-unknown/release/people.wasm
+      dependencies:
+        - name: people_integrity
+

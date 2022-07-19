@@ -1,0 +1,15 @@
+[package]
+edition = "2021"
+name = "groups"
+version = "0.0.1"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "groups"
+
+[dependencies]
+serde = "1"
+derive_more = "0"
+groups_integrity = { path = "../../integrity_zomes/groups" }
+hylo_utils = { path = "../../../lib/hylo_utils" }
+hdk = "0.0.140"

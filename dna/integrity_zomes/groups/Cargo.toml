@@ -1,0 +1,14 @@
+[package]
+edition = "2021"
+name = "groups_integrity"
+version = "0.0.1"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "groups_integrity"
+
+[dependencies]
+serde = "1"
+derive_more = "0"
+
+holochain_deterministic_integrity = "0.0.12"

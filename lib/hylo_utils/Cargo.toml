@@ -1,0 +1,13 @@
+[package]
+edition = "2021"
+name = "hylo_utils"
+version = "0.0.1"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "hylo_utils"
+
+[dependencies]
+serde = "1"
+derive_more = "0"
+hdk = "0.0.140"

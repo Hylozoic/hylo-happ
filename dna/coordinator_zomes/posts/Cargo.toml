@@ -1,0 +1,15 @@
+[package]
+edition = "2021"
+name = "posts"
+version = "0.0.1"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "posts"
+
+[dependencies]
+serde = "1"
+derive_more = "0"
+posts_integrity = { path = "../../integrity_zomes/posts" }
+hylo_utils = { path = "../../../lib/hylo_utils" }
+hdk = "0.0.140"

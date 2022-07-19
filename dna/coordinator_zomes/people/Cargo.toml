@@ -1,0 +1,15 @@
+[package]
+edition = "2021"
+name = "people"
+version = "0.0.1"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "people"
+
+[dependencies]
+serde = "1"
+derive_more = "0"
+people_integrity = { path = "../../integrity_zomes/people" }
+hylo_utils = { path = "../../../lib/hylo_utils" }
+hdk = "0.0.140"
