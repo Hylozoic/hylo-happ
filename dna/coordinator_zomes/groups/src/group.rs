@@ -67,6 +67,21 @@ pub fn all(_: Option<String>) -> ExternResult<Vec<Record>> {
     .collect()
 }
 
+#[hdk_extern]
+pub fn get_by_slug(group_slug: String) -> ExternResult<Record> {
+  let links = get_links(
+    typed_path_from_string(group_slug.clone()).path_entry_hash()?,
+    LinkTypes::PathToGroup,
+    None
+  )?;
+
+  match links.iter().last() {
+    Some(found_link) => {
+      return hylo_utils::get_latest_update_for(ActionHash::from(found_link.target.clone()));
+    },
+    _ => Err(wasm_error!(WasmErrorInner::Guest(String::from("Something went wrong"))))
+  }
+}
 
 #[hdk_extern]
 pub fn init(_: ()) -> ExternResult<InitCallbackResult> {
@@ -91,10 +106,18 @@ pub fn init(_: ()) -> ExternResult<InitCallbackResult> {
 mod tests {
   use super::*;
 
-    #[test]
-    fn test_path_string() {
-      assert_eq!(path_string(String::from("holochain")), String::from("all_groups.h.o"));
-    }
+  #[test]
+  fn test_path_string() {
+    assert_eq!(path_string(String::from("holochain")), String::from("all_groups.h.o"));
+  }
+
+  // #[test]
+  // fn test_all() {
+  //   let test = all(None).unwrap();
+
+  //   assert_eq!(test, vec![]);
+  // }
+
 }
 
 // Ok()

@@ -4,34 +4,29 @@ use posts_integrity::*;
 #[hdk_extern]
 // Can base (ActionHashB64) be an agent_pub_key?
 // pub fn all_for_base(base: holo_hash::ActionHashB64) -> ExternResult<Vec<Record>> {
-pub fn all_for_base(base: ActionHash) -> ExternResult<Vec<Record>> {
+pub fn all(base: ActionHash) -> ExternResult<Vec<Record>> {
   let links = get_links(base, LinkTypes::PostedToGroup, None)?;
-  let records = links
+
+  return links
     .iter()
     .map(|link| {
       let record = hylo_utils::get_latest_update_for(ActionHash::from(link.target.clone()))?;
       Ok(record)
     })
     // turns the iterator into actual vector
-    .collect::<ExternResult<Vec<Record>>>()?;
-
-  Ok(records)
+    .collect::<ExternResult<Vec<Record>>>();
 }
 
 #[hdk_extern]
-pub fn get_post(action_hash: ActionHash) -> ExternResult<Record> {
-  // Need to actually return the data here
-  let record = hylo_utils::get_latest_update_for(action_hash)?;
-
-  Ok(record)
+pub fn get(action_hash: ActionHash) -> ExternResult<Record> {
+  return hylo_utils::get_latest_update_for(action_hash);
 }
 
 #[hdk_extern]
-pub fn create_post(post: Post) -> ExternResult<Record> {
+pub fn create(post: Post) -> ExternResult<Record> {
   let action_hash = create_entry(&EntryTypes::Post(post.clone()))?;
-  let record = get_post(action_hash)?;
 
-  Ok(record)
+  return get(action_hash);
 }
 
 // #[derive(Serialize, Deserialize, Debug)]
