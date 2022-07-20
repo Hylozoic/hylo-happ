@@ -13,8 +13,7 @@ fn path_string(string: String) -> String {
     "{}.{}.{}",
     ROOT_PATH_STRING,
     string.chars().nth(0).unwrap(),
-    // Note: returns 2nd character as 1st is consumed by iterator above
-    string.chars().nth(0).unwrap()
+    string.chars().nth(1).unwrap()
   )
 }
 
@@ -88,6 +87,15 @@ pub fn init(_: ()) -> ExternResult<InitCallbackResult> {
   Ok(InitCallbackResult::Pass)
 }
 
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+    #[test]
+    fn test_path_string() {
+      assert_eq!(path_string(String::from("holochain")), String::from("all_groups.h.o"));
+    }
+}
 
 // Ok()
 // // for path in month_paths {
