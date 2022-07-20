@@ -11,7 +11,8 @@ pub enum EntryTypes {
 
 #[hdk_link_types]
 pub enum LinkTypes {
-  AgentToPerson
+  AgentToPerson,
+  GroupToPerson
 }
 
 #[hdk_extern]

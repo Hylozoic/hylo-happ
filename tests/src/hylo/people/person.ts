@@ -3,42 +3,41 @@ import { DnaSource } from "@holochain/client";
 import { pause, runScenario } from "@holochain/tryorama";
 import { hyloDna } from  "../../utils";
 import pkg from 'tape-promise/tape';
+import { decode } from "@msgpack/msgpack";
 
 const { test } = pkg;
 
 export default () => test("person CRUD tests", async (t) => {
   await runScenario(async scenario => {
     const dnas: DnaSource[] = [{path: hyloDna }];
-    const [alice, bob]  = await scenario.addPlayersWithHapps([dnas, dnas]);
+    const [bob]  = await scenario.addPlayersWithHapps([dnas]);
 
     await scenario.shareAllAgents();
 
     const createInput = {
-      "name": "weekend creates creates",
-      "avatarUrl": "maybe or toxic"
+      "name": "Bob Tester",
+      "avatar_url": "https://tiny.url/lkjasdfklj.jpg"
     };
 
-    // Alice creates a person
-    const createOutput: any = await alice.cells[0].callZome({
+    // Bob registers himself
+    const createOutput: any = await bob.cells[0].callZome({
       zome_name: "people",
       fn_name: "create",
       payload: createInput,
     });
-
-    t.ok(createOutput.actionHash);  // test 1
-    t.ok(createOutput.entryHash);   // test 2
+    t.ok(createOutput.entry.Present.entry);  // test 1
+    t.ok(createOutput.entry.Present.entry_type);   // test 2
 
     // Wait for the created entry to be propagated to the other node.
-    await pause(100);
+    // await pause(100);
 
-    // Bob gets the created person
-    const readOutput: typeof createInput = await bob.cells[0].callZome({
+    // Bob gets his record
+    const readOutput: any = await bob.cells[0].callZome({
       zome_name: "people",
       fn_name: "get",
-      payload: createOutput.entryHash,
+      payload: null
     });
-
-    t.deepEqual(readOutput, createInput); // test 3
+    t.deepEqual(decode(readOutput.entry.Present.entry), { ...createInput, agent_pub_key: bob.agentPubKey }); // test 3
   });
 });
 
