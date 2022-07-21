@@ -68,6 +68,11 @@ pub fn all(_: Option<String>) -> ExternResult<Vec<Record>> {
 }
 
 #[hdk_extern]
+pub fn get(action_hash: ActionHash) -> ExternResult<Record> {
+  return hylo_utils::get_latest_update_for(action_hash);
+}
+
+#[hdk_extern]
 pub fn get_by_slug(group_slug: String) -> ExternResult<Record> {
   let links = get_links(
     typed_path_from_string(group_slug.clone()).path_entry_hash()?,

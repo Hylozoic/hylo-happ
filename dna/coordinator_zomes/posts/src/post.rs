@@ -4,8 +4,8 @@ use posts_integrity::*;
 #[hdk_extern]
 // Can base (ActionHashB64) be an agent_pub_key?
 // pub fn all_for_base(base: holo_hash::ActionHashB64) -> ExternResult<Vec<Record>> {
-pub fn all(base: ActionHash) -> ExternResult<Vec<Record>> {
-  let links = get_links(base, LinkTypes::PostedToGroup, None)?;
+pub fn all(base_action_hash: ActionHash) -> ExternResult<Vec<Record>> {
+  let links = get_links(base_action_hash, LinkTypes::PostedToGroup, None)?;
 
   return links
     .iter()
@@ -22,11 +22,28 @@ pub fn get(action_hash: ActionHash) -> ExternResult<Record> {
   return hylo_utils::get_latest_update_for(action_hash);
 }
 
-#[hdk_extern]
-pub fn create(post: Post) -> ExternResult<Record> {
-  let action_hash = create_entry(&EntryTypes::Post(post.clone()))?;
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CreatePostInput {
+  pub post: Post,
+  pub to_base_action_hashes: Vec<ActionHash>
+}
 
-  return get(action_hash);
+#[hdk_extern]
+pub fn create(create_post_input: CreatePostInput) -> ExternResult<Record> {
+  let action_hash = create_entry(&EntryTypes::Post(create_post_input.post.clone()))?;
+
+  create_post_input.to_base_action_hashes
+    .iter()
+    .for_each(|base_action_hash| {
+      create_link(
+        base_action_hash.clone(),
+        action_hash.clone(),
+        LinkTypes::PostedToGroup,
+        ()
+      ).ok();
+    });
+
+  return get(action_hash)
 }
 
 // #[derive(Serialize, Deserialize, Debug)]
