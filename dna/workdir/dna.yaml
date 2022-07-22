@@ -6,8 +6,6 @@ integrity:
   properties: ~
   origin_time: 2022-07-14T19:51:25.736Z
   zomes:
-    - name: comments_integrity
-      bundled: ../../target/wasm32-unknown-unknown/release/comments_integrity.wasm
     - name: posts_integrity
       bundled: ../../target/wasm32-unknown-unknown/release/posts_integrity.wasm
     - name: groups_integrity
@@ -17,10 +15,6 @@ integrity:
 
 coordinator:
   zomes:
-    - name: comments
-      bundled: ../../target/wasm32-unknown-unknown/release/comments.wasm
-      dependencies:
-        - name: comments_integrity
     - name: posts
       bundled: ../../target/wasm32-unknown-unknown/release/posts.wasm
       dependencies:
