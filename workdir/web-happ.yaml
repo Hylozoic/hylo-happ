@@ -1,0 +1,7 @@
+---
+manifest_version: "1"
+name: hylo
+ui:
+  bundled: './hylo-happ-ui.zip'
+happ_manifest:
+  bundled: './hylo.happ'
