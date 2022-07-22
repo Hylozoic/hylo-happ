@@ -6,6 +6,5 @@ pub struct Post {
   pub title: String,
   pub details: String,
   pub post_type: String,
-  pub announcement: bool,
-  pub author_pub_key: AgentPubKey
+  pub announcement: bool
 }

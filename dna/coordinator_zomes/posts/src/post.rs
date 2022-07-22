@@ -25,14 +25,14 @@ pub fn get(action_hash: ActionHash) -> ExternResult<Record> {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CreatePostInput {
   pub post: Post,
-  pub to_base_action_hashes: Vec<ActionHash>
+  pub base_action_hashes: Vec<ActionHash>
 }
 
 #[hdk_extern]
 pub fn create(create_post_input: CreatePostInput) -> ExternResult<Record> {
   let action_hash = create_entry(&EntryTypes::Post(create_post_input.post.clone()))?;
 
-  create_post_input.to_base_action_hashes
+  create_post_input.base_action_hashes
     .iter()
     .for_each(|base_action_hash| {
       create_link(
